@@ -43,3 +43,7 @@ const checkUser= async(mobile,email)=>{
     }
 }
 
+module.exports={
+    creatuser,
+    checkUser
+}
