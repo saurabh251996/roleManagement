@@ -1,10 +1,28 @@
-const user=require('userSchema')
+const user=require('../models/userModel')
 const bcrypt=require('bcrypt')
+const role=require('../models/roleModel')
 
 const creatuser=async(userData)=>{
     try{
+        
+        
+        let role = await role.findOne({ name: userData.role });
+        if (!role) {
+            role = new Role({
+                name: userData.role,
+                permissions: userData.permissions || ['read', 'write']
+            });
+            await role.save();
+
+        }
+
+        userData.role = role._id;
+    
+
         const salt=bcrypt.genSalt(10)
         const bcryptPassword=await bcrypt.hash(userData.password,salt)
+
+
         const response=await new user(
             {
                name: userData.name,
